@@ -1,21 +1,19 @@
-# Use a imagem oficial do Python como base
+# Use uma imagem oficial do Python como base
 FROM python:3.11-slim
 
-# Defina o diretório de trabalho
+# Set o diretório de trabalho
 WORKDIR /app
 
-# Copie os arquivos do projeto para o contêiner
+# Copie os arquivos para o diretório de trabalho
 COPY . /app/
 
-# Instale as dependências do sistema
+# Instale as dependências
 RUN apt-get update && apt-get install -y libpq-dev
-
-# Instale o pipenv e as dependências
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-# Exponha a porta em que o servidor Django vai rodar
+# Exponha a porta 8000 para o Django
 EXPOSE 8000
 
-# Defina o comando para iniciar o servidor Django
+# Defina o comando de inicialização
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
