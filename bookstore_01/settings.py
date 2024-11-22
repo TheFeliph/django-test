@@ -23,7 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-pg&f7o8*htfsrhz#zja(3d@ph5^*3=br&s&n67qxp*qo$%t!-r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True  # Isso deve ser True em desenvolvimento
+import os
+
+DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
 
 
@@ -84,17 +86,17 @@ WSGI_APPLICATION = 'bookstore_01.wsgi.application'
 import os
 from urllib.parse import urlparse
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'bookstore',
-        'USER': 'user',
-        'PASSWORD': 'password',
-        'HOST': 'db',
+        'NAME': os.getenv('POSTGRES_DB', 'bookstore'),
+        'USER': os.getenv('POSTGRES_USER', 'user'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'password'),
+        'HOST': os.getenv('DB_HOST', 'db'),
         'PORT': '5432',
     }
 }
-
 
 
 # Password validation

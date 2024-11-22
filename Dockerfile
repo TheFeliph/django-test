@@ -1,19 +1,21 @@
-# Use uma imagem oficial do Python como base
+# 1. Use uma imagem oficial e leve do Python
 FROM python:3.11-slim
 
-# Set o diretório de trabalho
+# 2. Defina o diretório de trabalho
 WORKDIR /app
 
-# Copie os arquivos para o diretório de trabalho
-COPY . /app/
+# 3. Instale dependências do sistema necessárias
+RUN apt-get update && apt-get install -y libpq-dev \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Instale as dependências
-RUN apt-get update && apt-get install -y libpq-dev
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+# 4. Copie o arquivo de requisitos primeiro para aproveitar o cache
+COPY requirements.txt .
 
-# Exponha a porta 8000 para o Django
-EXPOSE 8000
+# 5. Atualize o pip e instale dependências
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Defina o comando de inicialização
+# 6. Copie o restante do código do app
+COPY . .
+
+# 7. Comando padrão para rodar o app
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

@@ -1,16 +1,14 @@
 #!/bin/bash
-# wait-for-it.sh
+set -e
 
 host="$1"
 shift
-port="$1"
-shift
 cmd="$@"
 
-until nc -z "$host" "$port"; do
-echo "Waiting for $host:$port to be available..."
-sleep 1
+until pg_isready -h "$host" -p "5432"; do
+  >&2 echo "Postgres is unavailable - sleeping"
+  sleep 1
 done
 
-echo "$host:$port is available - executing command"
+>&2 echo "Postgres is up - executing command"
 exec $cmd

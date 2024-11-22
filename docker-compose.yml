@@ -1,11 +1,13 @@
 services:
   web:
-    build: .
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/app
+    build:
+      context: .
     ports:
       - "8000:8000"
+    volumes:
+      - .:/app
+    command: python manage.py runserver 0.0.0.0:8000
+
     depends_on:
       - db
     networks:
@@ -16,9 +18,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: bookstore
+      POSTGRES_USER: ${POSTGRES_USER:-user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-bookstore}
     networks:
       - app_network  # Conecta à rede personalizada
 
@@ -27,4 +29,4 @@ volumes:
 
 networks:
   app_network:
-    driver: bridge  # Cria uma rede personalizada usando o driver 'bridge'
+    driver: bridge
