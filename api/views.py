@@ -1,30 +1,20 @@
-# api/views.py
-
-from rest_framework import viewsets
-from .models import Cliente, Pedido
-from .serializers import ClienteSerializer, PedidoSerializer
-from rest_framework.permissions import IsAuthenticated
-from django.http import HttpResponse
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .models import Cliente
+from .serializers import ClienteSerializer  # Criaremos isso no próximo passo
 
 
-def api_v1(request):
-    return HttpResponse("Esta é a versão 1 da API!")
-
-class ClienteViewSet(viewsets.ModelViewSet):
-    queryset = Cliente.objects.all().order_by('nome')  # Adicionando ordenação por nome
-    serializer_class = ClienteSerializer
-
-class PedidoViewSet(viewsets.ModelViewSet):
-    queryset = Pedido.objects.all().order_by('id')  # Adicionando ordenação por id (exemplo)
-    serializer_class = PedidoSerializer
+class ClientePagination(PageNumberPagination):
+    page_size = 5  # Número de itens por página
+    page_size_query_param = 'page_size'
+    max_page_size = 20
 
 
-class ClienteViewSet(viewsets.ModelViewSet):
-    queryset = Cliente.objects.all()
-    serializer_class = ClienteSerializer
-    permission_classes = [IsAuthenticated]
-
-from django.http import HttpResponse
-
-def home(request):
-    return HttpResponse("Bem-vindo à Loja Virtual!")
+class ClienteListView(APIView):
+    def get(self, request):
+        clientes = Cliente.objects.all()
+        paginator = ClientePagination()
+        paginated_clientes = paginator.paginate_queryset(clientes, request)
+        serializer = ClienteSerializer(paginated_clientes, many=True)
+        return paginator.get_paginated_response(serializer.data)
