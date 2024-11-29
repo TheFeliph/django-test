@@ -99,7 +99,7 @@ DATABASES = {
         'PORT': '5432',
         'default': dj_database_url.config(
         default=os.getenv('DATABASE_URL', 'postgres://postgres:postgres@localhost:5432/test_db')
-        )
+    )
     }
 }
 
