@@ -86,6 +86,7 @@ WSGI_APPLICATION = 'bookstore_01.wsgi.application'
 import os
 from urllib.parse import urlparse
 from dj_database_url import config as db_config
+import dj_database_url
 
 
 DATABASES = {
@@ -96,7 +97,7 @@ DATABASES = {
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'password'),
         'HOST': os.getenv('DB_HOST', 'db'),
         'PORT': '5432',
-        'default': db_config(default=os.getenv('DATABASE_URL'))
+        'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
     }
 }
 
