@@ -97,7 +97,9 @@ DATABASES = {
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'password'),
         'HOST': os.getenv('DB_HOST', 'db'),
         'PORT': '5432',
-        'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+        'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL', 'postgres://postgres:postgres@localhost:5432/test_db')
+        )
     }
 }
 
