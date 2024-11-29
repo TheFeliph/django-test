@@ -1,8 +1,6 @@
-__pycache__
+# Ignore arquivos desnecessários
 *.pyc
-*.pyo
-*.pyd
-.Python
-db.sqlite3
-*.log
+__pycache__
 .env
+.DS_Store
+.git

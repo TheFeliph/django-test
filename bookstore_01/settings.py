@@ -23,7 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-pg&f7o8*htfsrhz#zja(3d@ph5^*3=br&s&n67qxp*qo$%t!-r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True  # Isso deve ser True em desenvolvimento
+import os
+
+DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
 
 
@@ -81,10 +83,20 @@ WSGI_APPLICATION = 'bookstore_01.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+import os
+from urllib.parse import urlparse
+from dj_database_url import config as db_config
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('POSTGRES_DB', 'bookstore'),
+        'USER': os.getenv('POSTGRES_USER', 'user'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'password'),
+        'HOST': os.getenv('DB_HOST', 'db'),
+        'PORT': '5432',
+        'default': db_config(default=os.getenv('DATABASE_URL'))
     }
 }
 
