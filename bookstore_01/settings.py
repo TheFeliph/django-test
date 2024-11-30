@@ -57,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'bookstore_01.urls'
@@ -98,7 +99,7 @@ DATABASES = {
         'HOST': os.getenv('DB_HOST', 'db'),
         'PORT': '5432',
         'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL', 'postgres://postgres:postgres@localhost:5432/test_db')
+        default=os.getenv('DATABASE_URL')
     )
     }
 }
@@ -154,4 +155,22 @@ REST_FRAMEWORK = {
 
 
 import django_heroku
+import dj_database_url
+from decouple import config
+
+# Configura o banco de dados para produção
+DATABASES = {
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL', default='sqlite:///db.sqlite3')
+    )
+}
+
+# Ativa configurações do Heroku
 django_heroku.settings(locals())
+
+
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
