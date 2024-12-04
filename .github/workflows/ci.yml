@@ -1,30 +1,31 @@
-name: CI Workflow
+name: CI for Bookstore Project
 
 on:
   push:
     branches:
-      - main
+      - main  # Trigger the action when there's a push to the main branch
   pull_request:
     branches:
-      - main
+      - main  # Trigger the action when a pull request is created for the main branch
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  test:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu image for the job
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3  # Action to checkout the code
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v4  # Action to set up Python environment
         with:
-          python-version: '3.9'
+          python-version: '3.9'  # Set the Python version you are using
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Install the dependencies from requirements.txt
 
       - name: Run tests
         run: |
-          pytest
+          pytest  # Run your tests using pytest (you can change this command as needed)
