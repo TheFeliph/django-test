@@ -1,28 +1,16 @@
-name: Django CI
+name: CI Workflow
 
 on:
   push:
     branches:
       - main
-      - add-github-actions
   pull_request:
     branches:
       - main
-      - add-github-actions
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:13
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: test_db
 
     steps:
       - name: Checkout code
@@ -36,16 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          pip install psycopg2-binary
-
-      - name: Run migrations
-        env:
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
-        run: |
-          python manage.py migrate
 
       - name: Run tests
-        env:
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
         run: |
-          python manage.py test
+          pytest
