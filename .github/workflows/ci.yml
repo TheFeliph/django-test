@@ -19,7 +19,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4  # Action para configurar o Python
         with:
-          python-version: '3.9'  # Define a versão do Python para a execução
+          python-version: '3.10'  # Define a versão do Python para a execução
 
       - name: Install dependencies
         run: |
