@@ -1,0 +1,6 @@
+# Ignore arquivos desnecessários
+*.pyc
+__pycache__
+.env
+.DS_Store
+.git
